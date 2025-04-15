@@ -8,12 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.ucb.domain.Movie
 import com.ucb.ucbtest.counter.CounterUI
-import com.ucb.ucbtest.gitalias.GitaliasUI
-import com.ucb.ucbtest.login.LoginUI
-import com.ucb.ucbtest.movie.MoviesUI
-import com.ucb.ucbtest.moviedetail.MovieDetailUI
 import com.ucb.ucbtest.takephoto.TakePhotoUI
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -26,14 +21,14 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.LoginScreen.route,
+        startDestination = Screen.CounterScreen.route,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         popEnterTransition = { EnterTransition.None },
         popExitTransition = { ExitTransition.None }
 
     ) {
-        composable(Screen.MenuScreen.route) {
+        /*composable(Screen.MenuScreen.route) {
             LoginUI(
                 onSuccess = {
                     navController.navigate(Screen.GitaliasScreen.route)
@@ -80,7 +75,7 @@ fun AppNavigation() {
             val movie = Json.decodeFromString<Movie>(movieDecoded)
 
             MovieDetailUI( movie = movie, onBackPressed = { navController.popBackStack() })
-        }
+        }*/
 
         composable(Screen.CounterScreen.route) {
             CounterUI()

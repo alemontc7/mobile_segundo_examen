@@ -1,7 +1,7 @@
 package com.ucb.ucbtest.di
 
 import android.content.Context
-import com.ucb.data.GithubRepository
+/*import com.ucb.data.GithubRepository
 import com.ucb.data.LoginRepository
 import com.ucb.data.MovieRepository
 import com.ucb.data.PushNotificationRepository
@@ -13,28 +13,22 @@ import com.ucb.data.push.IPushDataSource
 import com.ucb.framework.github.GithubLocalDataSource
 import com.ucb.framework.github.GithubRemoteDataSource
 import com.ucb.framework.movie.MovieRemoteDataSource
-import com.ucb.framework.service.RetrofitBuilder
+import com.ucb.framework.service.RetrofitBuilder*/
 import com.ucb.ucbtest.R
-import com.ucb.usecases.DoLogin
-import com.ucb.usecases.FindGitAlias
-import com.ucb.usecases.GetPopularMovies
-import com.ucb.usecases.SaveGitalias
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import com.ucb.framework.datastore.LoginDataSource
-import com.ucb.framework.push.FirebaseNotificationDataSource
-import com.ucb.usecases.GetEmailKey
-import com.ucb.usecases.ObtainToken
+//import com.ucb.framework.datastore.LoginDataSource
+//import com.ucb.framework.push.FirebaseNotificationDataSource
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Provides
+    /*@Provides
     @Singleton
     fun providerRetrofitBuilder(@ApplicationContext context: Context) : RetrofitBuilder {
         return RetrofitBuilder(context)
@@ -130,5 +124,5 @@ object AppModule {
     @Singleton
     fun provideIPushDataSource(): IPushDataSource {
         return FirebaseNotificationDataSource()
-    }
+    }*/
 }
