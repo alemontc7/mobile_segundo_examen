@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.ucb.ucbtest.books.BooksUI
 import com.ucb.ucbtest.counter.CounterUI
 import com.ucb.ucbtest.takephoto.TakePhotoUI
 import kotlinx.serialization.encodeToString
@@ -21,7 +22,7 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.CounterScreen.route,
+        startDestination = Screen.BooksScreen.route,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         popEnterTransition = { EnterTransition.None },
@@ -79,6 +80,10 @@ fun AppNavigation() {
 
         composable(Screen.CounterScreen.route) {
             CounterUI()
+        }
+
+        composable(Screen.BooksScreen.route) {
+            BooksUI()
         }
 
     }

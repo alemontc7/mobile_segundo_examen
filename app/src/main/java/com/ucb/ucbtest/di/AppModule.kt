@@ -1,6 +1,10 @@
 package com.ucb.ucbtest.di
 
 import android.content.Context
+import com.ucb.data.BookRepository
+import com.ucb.data.books.IBookRemoteDataSource
+import com.ucb.framework.books.BookRemoteDataSource
+import com.ucb.framework.service.RetrofitBuilder
 /*import com.ucb.data.GithubRepository
 import com.ucb.data.LoginRepository
 import com.ucb.data.MovieRepository
@@ -15,6 +19,7 @@ import com.ucb.framework.github.GithubRemoteDataSource
 import com.ucb.framework.movie.MovieRemoteDataSource
 import com.ucb.framework.service.RetrofitBuilder*/
 import com.ucb.ucbtest.R
+import com.ucb.usecases.GetBooks
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +33,37 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    @Provides
+    @Singleton
+    fun provideRetrofitBuilder(@ApplicationContext context: Context): RetrofitBuilder {
+        return RetrofitBuilder(context)
+    }
+
+
+    // ============================
+    // Books Feature
+    // ============================
+
+    // Proveedor del data source remoto para Books
+    @Provides
+    @Singleton
+    fun provideBookRemoteDataSource(retrofitBuilder: RetrofitBuilder): IBookRemoteDataSource {
+        return BookRemoteDataSource(retrofitBuilder)
+    }
+
+    // Proveedor del Repository para Books
+    @Provides
+    @Singleton
+    fun provideBookRepository(remoteDataSource: IBookRemoteDataSource): BookRepository {
+        return BookRepository(remoteDataSource)
+    }
+
+    // Proveedor del Use Case para obtener libros (GetBooks)
+    @Provides
+    @Singleton
+    fun provideGetBooks(bookRepository: BookRepository): GetBooks {
+        return GetBooks(bookRepository)
+    }
     /*@Provides
     @Singleton
     fun providerRetrofitBuilder(@ApplicationContext context: Context) : RetrofitBuilder {
