@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -69,7 +71,11 @@ fun BooksUI(booksViewModel: BooksViewModel = hiltViewModel()) {
             is BooksViewModel.BooksState.Success -> {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(uiState.books) { book ->
-                        BookCard(book = book)
+                        BookCard(
+                            book = book,
+                            isFavorite = false,
+                            onFavoriteClick = {}
+                        )
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
@@ -94,16 +100,38 @@ fun BooksUI(booksViewModel: BooksViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun BookCard(book: Book) {
+fun BookCard(
+    book: Book,
+    isFavorite: Boolean,
+    onFavoriteClick: () -> Unit
+) {
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = book.title,
-                style = MaterialTheme.typography.titleMedium,
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = book.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.weight(1f)
+                )
+
+                IconButton(
+                    onClick = onFavoriteClick
+                ) {
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = if (isFavorite) "Quitar de favoritos" else "Añadir a favoritos",
+                        tint = if (isFavorite) Color.Red else MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "Autor/es: ${book.authors.joinToString(", ")}",
