@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.ucb.data.NetworkResult
 import com.ucb.domain.Book
 import com.ucb.usecases.GetBooks
+import com.ucb.usecases.books.LikeBook
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BooksViewModel @Inject constructor(
-    private val getBooks: GetBooks
+    private val getBooks: GetBooks,
+    private val likeBookUseCase: LikeBook
 ): ViewModel() {
     sealed class BooksState {
         object Idle: BooksState()
@@ -42,6 +44,16 @@ class BooksViewModel @Inject constructor(
                 _state.value = BooksState.Error(e.message ?: "Error desconocido")
             }
         }
+    }
 
+    fun onLikeBook(book: Book) {
+        viewModelScope.launch {
+            try {
+
+                val success = likeBookUseCase(book)
+            } catch (e: Exception) {
+                _state.value = BooksState.Error(e.message ?: "Error desconocido")
+            }
+        }
     }
 }

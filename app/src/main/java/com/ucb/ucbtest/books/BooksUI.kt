@@ -8,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -16,9 +15,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.collectAsState
@@ -34,7 +31,6 @@ import com.ucb.domain.Book
 fun BooksUI(booksViewModel: BooksViewModel = hiltViewModel()) {
     val searchQuery = remember { mutableStateOf("") }
     val uiState = booksViewModel.state.collectAsState().value
-
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -62,6 +58,7 @@ fun BooksUI(booksViewModel: BooksViewModel = hiltViewModel()) {
         when (uiState) {
             is BooksViewModel.BooksState.Loading -> {
                 Box(
+
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
@@ -73,8 +70,7 @@ fun BooksUI(booksViewModel: BooksViewModel = hiltViewModel()) {
                     items(uiState.books) { book ->
                         BookCard(
                             book = book,
-                            isFavorite = false,
-                            onFavoriteClick = {}
+                            onFavoriteClick = { booksViewModel.onLikeBook(book) }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                     }
@@ -102,9 +98,10 @@ fun BooksUI(booksViewModel: BooksViewModel = hiltViewModel()) {
 @Composable
 fun BookCard(
     book: Book,
-    isFavorite: Boolean,
-    onFavoriteClick: () -> Unit
+    onFavoriteClick: (Book) -> Unit = {}
 ) {
+    val isFavorite = remember { mutableStateOf(false) }
+
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -120,21 +117,22 @@ fun BookCard(
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.weight(1f)
                 )
-
                 IconButton(
-                    onClick = onFavoriteClick
+                    onClick = {
+                        isFavorite.value = !isFavorite.value
+                        onFavoriteClick(book)
+                    }
                 ) {
                     Icon(
-                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = if (isFavorite) "Quitar de favoritos" else "Añadir a favoritos",
-                        tint = if (isFavorite) Color.Red else MaterialTheme.colorScheme.onSurface
+                        imageVector = if (isFavorite.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = if (isFavorite.value) "Quitar de favoritos" else "Añadir a favoritos",
+                        tint = if (isFavorite.value) Color.Red else MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
-
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Autor/es: ${book.authors.joinToString(", ")}",
+                text = "Autor(es): ${book.authors.joinToString(", ")}",
                 style = MaterialTheme.typography.bodyMedium
             )
             Spacer(modifier = Modifier.height(4.dp))
